@@ -1,0 +1,24 @@
+#!/bin/sh
+
+AppCentralDir=/usr/local/AppCentral
+
+HttpdDir=$(find $AppCentralDir -maxdepth 1 -type d -name 'httpd-*' -print -quit)
+
+Apache2=$HttpdDir/data/binary/sbin/apache2
+
+# If web server is down, restart the server.
+if ! pidof apache2 > /dev/null
+then
+    echo `date +"[%Y-%m-%d %T GMT]"` "Server down"
+    echo `date +"[%Y-%m-%d %T GMT]"` "restarting Apache2 server.."
+    $Apache2 -k restart > /dev/null
+    sleep 10
+ 
+    #checking if apache restarted or not
+    if pidof apache2 > /dev/null
+    then
+        echo `date +"[%Y-%m-%d %T GMT]"` "Apache stopped on Molib Stage. Automatically restarted succesfully."
+    else
+        echo `date +"[%Y-%m-%d %T GMT]"` "Apache stopped on Molib Stage. Automatically restart failed. Please check manually."
+    fi
+fi
