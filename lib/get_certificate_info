@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Asustor Web SSL certification list file location
+CRT_FILE=/usr/builtin/etc/certificate/certificate.json
+
+# Display help for command line arguments
+helpFunction()
+{
+   echo ""
+   echo "Usage: $0 -d domainName"
+   echo -e "\t-d Domain name"
+   exit 1 # Exit script after printing help
+}
+
+# Get all the argument passed from the command line
+while getopts "d:" opt
+do
+   case "$opt" in
+      d ) domainName="$OPTARG" ;;
+      ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
+   esac
+done
+
+# Print helpFunction in case parameters are empty
+if [ -z "$domainName" ]
+then
+   echo "Please provide the domain name";
+   helpFunction
+fi
+
+# Get the domain SSL certification ID from the certification list
+CRT_ID=$(php -r "\$cert=(json_decode(utf8_encode(file_get_contents('$CRT_FILE')),true));foreach(\$cert['cert_list'] as \$key){if(in_array('"$domainName"', explode(',',\$key['alt_name']))){\$crt_id=\$key['id'];}}print(\$crt_id);")
+
+# Begin script in case all parameters are correct
+echo "$CRT_ID"
