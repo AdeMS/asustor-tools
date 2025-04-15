@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SETUP_DIR=/root/bin
+INSTALL_DIR=/usr/builtin/bin
+
+COMPOSER_URL=https://getcomposer.org/installer
+
+if [ ! -f $SETUP_DIR/composer-setup.php ];
+then
+    echo `date +"[%Y-%m-%d %T GMT]"` "Downloading composer setup."
+    php -r "copy('$COMPOSER_URL', '$SETUP_DIR/composer-setup.php');"
+fi
+ 
+if [ ! -f $INSTALL_DIR/composer ];
+then
+    echo `date +"[%Y-%m-%d %T GMT]"` "Install composer into $INSATLL_DIR"
+    php $SETUP_DIR/composer-setup.php --install-dir=$INSTALL_DIR --filename=composer
+fi
