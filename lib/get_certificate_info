@@ -47,7 +47,7 @@ CRT_DATA=$(php -r '
             print("\"id\":\"$key[id]\",\n");
             print("\"domain_name\":\"'$domainName'\",\n");
             print("\"crt_dir\":\"'$CRT_DIR'/$key[id]\",\n");
-            print("\"valid_time\":\"$key[valid_time]\",\n");
+            print("\"valid_time\":\"$key[valid_time]\"\n");
             print("}");
         }
     }
